@@ -1,11 +1,14 @@
 FROM bitnami/php-fpm:7.3.5-prod
 
-# Install MongoDB extension
+# Install dependencies
 RUN apt-get update \
-  && apt-get install -y php-mongodb
+  && apt-get install -y libssl-dev libsslcommon2-dev libcurl4-openssl-dev pkg-config
+
+# Install MongoDB extension
+RUN pecl install mongodb
 
 # Enable extension
-RUN echo "extension=mongodb.so" > /opt/bitnami/php/etc/conf.d/99-mongodb.ini
+RUN echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
 
 # Open port
 EXPOSE 9000
