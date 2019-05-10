@@ -2,7 +2,7 @@ FROM bitnami/php-fpm:7.3.5-prod
 
 # Install dependencies
 RUN apt-get update \
-  && apt-get install -y libssl-dev libcurl4-openssl-dev pkg-config
+  && apt-get install -y autoconf libssl-dev libcurl4-openssl-dev pkg-config
 
 # Install MongoDB extension
 RUN pecl install mongodb
