@@ -1,14 +1,13 @@
-FROM bitnami/php-fpm:7.3.5-prod
+FROM phpdockerio/php73-fpm:latest
+WORKDIR "/var/www/html"
 
-# Install dependencies
+# Fix debconf warnings upon build
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install selected extensions and other stuff
 RUN apt-get update \
-  && apt-get install -y autoconf libssl-dev libcurl4-openssl-dev pkg-config
-
-# Install MongoDB extension
-RUN pecl install mongodb
-
-# Enable extension
-RUN echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+    && apt-get -y --no-install-recommends install  php7.3-mysql php7.3-gd php-imagick php7.3-imap php7.3-intl php-mongodb \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # Open port
 EXPOSE 9000
